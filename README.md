@@ -8,6 +8,8 @@ Bu doküman, ESP32 tabanlı bir RGB LED kontrol sisteminin detaylarını içerir
 - 🏠 HC-SR04 ile varlık algılama ve enerji tasarrufu
 - 🌤️ Türkiye/Ankara hava durumuna göre LED dans modu
 
+## 📷 Kart ve Proje Görselleri
+
 ## 🛠️ Donanım Detayları
 
 ### 🔧 Gerekli Bileşenler
@@ -72,15 +74,17 @@ pie
 ### ⚙️ Kod Yapısı (Detaylı)
 ```plaintext
 /RGB-Control-System-with-ESP32-C6
-│── /data
-│   ├── config.json       # Sistem ayarları
-│   └── schedule.json     # Zamanlama ayarları
-│── /lib
-│   ├── UI_Manager       # OLED arayüz kodu
-│   ├── LED_Controller   # PWM kontrol sınıfı
-│   └── Sensor_Manager   # HC-SR04 işlemleri
-│── main.ino             # Ana program
-└── settings.h           # Tüm ayarlar
+├── /web-server
+│   ├── config.php
+│   ├── connect.php
+│   ├── color.php
+│   └── relay.php
+├── /includes
+│   └── functions.php
+└── index.php
+│── /src
+│   ├── main.ino
+└── ├── settings.h
 ```
 ### 🔄 Flashing İşlemi
 1. Arduino IDE'de:
@@ -199,9 +203,11 @@ graph TD;
 ## 📜 Lisans
 - **Lisans**: CERN-OHL-S-2.0
 
+## 🤝 Sponsorlarımız
+
 ## 📞 İletişim ve Destek
-- **E-posta**: support@ledcontrolproject.com
-- **Discord**: https://discord.gg/ledcontrol
+- **E-posta**: info@makerpcb.com.tr
+- **Web Site**: https://makerpcb.com.tr
 - **Hata Takibi**: GitHub Issues
 
 ---
