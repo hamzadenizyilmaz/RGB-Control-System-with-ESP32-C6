@@ -9,7 +9,7 @@ Bu doküman, ESP32 tabanlı bir RGB LED kontrol sisteminin detaylarını içerir
 - 🌤️ Türkiye/Ankara hava durumuna göre LED dans modu
 
 ## 📷 Kart ve Proje Görselleri
-<video src="media/1.MP4" width="100%" controls></video>
+<video src="media/1.mp4" width="100%" controls></video>
 
 ![Alt Text](images/1.jpg)
 
