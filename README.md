@@ -331,7 +331,6 @@ Show your appreciation and let the world know you’re backed by professional de
 
 **Badge Perks:**  
 ✔ Recognized by the Rhino 3D community  
-✔ Project visibility in McNeel's showcase  
 ✔ Eligibility for early-access plugin invites  
 
 > **Tip:** Add this badge on your GitHub Readme or 3D-printed enclosure label to boost your project's professional look.
