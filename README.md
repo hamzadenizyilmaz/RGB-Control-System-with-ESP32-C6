@@ -268,6 +268,102 @@ As the backbone of our hardware supply chain, Elecrow delivered:
 **Pro Tip:** Show this badge on your project enclosure to get VIP treatment on future orders:  
 ![Elecrow Sponsor Badge](images/elecrow.png)  
 
+## 🤝 Our Sponsors  
+
+<div align="center">
+  <img src="images/rhino3d.png" alt="Rhino 3D Logo" width="300">
+  <h2>🎯 Rhino 3D – Powering Precision in Digital Fabrication and Parametric Design</h2>
+</div>
+
+### 🌟 Why Rhino 3D Backed Our Project
+Our project thrives at the intersection of hardware and digital creativity — and **Rhino 3D** made that possible by delivering:
+
+- **Parametric modeling flexibility**: Complex control enclosures and 3D-printable casing design
+- **Seamless compatibility**: Export-ready formats for laser cutting, CNC milling, and 3D printing
+- **Precise prototyping**: 0.01mm tolerance modeling ensured hardware alignment on the first try
+
+With Rhino’s powerful NURBS modeling engine, we achieved advanced geometric detail without compromising manufacturability or time-to-market.
+
+### 🧩 How Rhino 3D Elevated Our Workflow
+| Feature | Contribution to Project | Bonus Insight |
+|--------|--------------------------|----------------|
+| **Grasshopper** | Parametric casing & modular enclosures | Interactive adjustments in real-time |
+| **Mesh Tools** | Optimized STL export for 3D printing | Zero mesh errors on slicing |
+| **Plugin Ecosystem** | Kangaroo, LunchBox, Human UI | Integrated user interaction + form-finding |
+| **File Interoperability** | Export to STEP, IGES, STL | Easy transition from design to fabrication |
+
+### 🧠 Designed with Intention
+Using Rhino 3D, we designed:
+- Custom mount brackets for our **ESP32-C6 DevKit**
+- **OLED screen bezel** that fits flush within laser-cut panels
+- Modular **RGB LED diffuser shells** optimized for IRFZ44N-based control
+
+All components were simulated, exported, and fabricated — **without a single dimensional error**.
+
+---
+
+### 📦 Rhino 3D Exclusive for Makers
+
+```markdown
+- [ ] **TRYRHINO** → 90-day free trial
+- [ ] **EDU50** → 50% off for students & educators
+- [ ] **PLUGPACK** → Free starter plugin kit
+```
+
+---
+
+### 🏆 Testimonial
+
+> "Designing precision-fit casings for embedded systems is often trial and error — but with Rhino, it became **an exact science**. It’s not just a CAD tool, it’s our digital workshop."  
+> — RGB-Control-System-with-ESP32-C6, Project Lead
+
+---
+
+<div align="center">
+  <h3>🔗 Connect with Rhino</h3>
+  <p>
+    <a href="https://www.rhino3d.com/" target="_blank">🌐 Official Website</a> | 
+    <a href="mailto:support@mcneel.com">✉️ Support</a> | 
+    <a href="https://www.linkedin.com/company/mcneel-europe" target="_blank">💼 LinkedIn</a>
+  </p>
+  <img src="images/rhino3d.png" alt="Rhino 3D in action" width="500" style="border-radius: 15px; margin-top: 20px;">
+  <p><em>Design stages of our ESP32-based casing using Rhino 3D</em></p>
+</div>
+
+---
+
+## 🏷️ Official Sponsor Badge
+
+Show your appreciation and let the world know you’re backed by professional design tools.
+
+<div align="center">
+  <img src="images/rhino3d_badge.png" alt="Rhino 3D Sponsor Badge" width="200">
+  <p><em>Place this badge on your project enclosures, documentation, or web dashboard</em></p>
+</div>
+
+**Badge Perks:**  
+✔ Recognized by the Rhino 3D community  
+✔ Project visibility in McNeel's showcase  
+✔ Eligibility for early-access plugin invites  
+
+> **Tip:** Add this badge on your GitHub Readme or 3D-printed enclosure label to boost your project's professional look.
+
+---
+
+### 🔍 Explore Further
+- [x] **[Plugin Marketplace](https://www.food4rhino.com/)**  
+- [x] **[Community Forum](https://discourse.mcneel.com/)**  
+- [x] **[Learning Portal](https://www.rhino3d.com/learn/)**
+
+---
+
+**🛡️ Trust Indicators:**  
+✔ 25+ years of digital modeling legacy  
+✔ Global maker and architecture community  
+✔ Regular updates & academic access  
+
+**#Rhino3D #ParametricDesign #HardwareWithStylee**
+
 ## 📞 Contact & Support
 - **Email**: info@makerpcb.com.tr
 - **Website**: https://makerpcb.com.tr
