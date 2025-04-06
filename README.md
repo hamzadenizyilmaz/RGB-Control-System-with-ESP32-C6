@@ -271,7 +271,7 @@ As the backbone of our hardware supply chain, Elecrow delivered:
 - **Issue Tracking**: GitHub Issues
 
 ## 📷 Board & Project Images
-<video src="media/1.mp4" width="100%" controls></video>
+![Alt Text](images/4.mp4)
 
 ![Alt Text](images/1.jpg)
 
