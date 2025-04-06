@@ -1,0 +1,18 @@
+#ifndef SETTINGS_H
+#define SETTINGS_H
+
+#define WIFI_SSID "WIFI_SSID"
+#define WIFI_PASS "WIFI_PASS"
+
+#define WEATHER_API_KEY "API_KEY"
+
+#define NTP_SERVER "pool.ntp.org"
+#define TIMEZONE_OFFSET 10800
+
+#define LED_COUNT 60
+#define DEFAULT_BRIGHTNESS 100
+
+#define MAX_DISTANCE 200 
+#define MOVEMENT_TIMEOUT 300000 
+
+#endif
