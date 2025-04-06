@@ -300,18 +300,6 @@ Using Rhino 3D, we designed:
 
 All components were simulated, exported, and fabricated — **without a single dimensional error**.
 
----
-
-### 📦 Rhino 3D Exclusive for Makers
-
-```markdown
-- [ ] **TRYRHINO** → 90-day free trial
-- [ ] **EDU50** → 50% off for students & educators
-- [ ] **PLUGPACK** → Free starter plugin kit
-```
-
----
-
 ### 🏆 Testimonial
 
 > "Designing precision-fit casings for embedded systems is often trial and error — but with Rhino, it became **an exact science**. It’s not just a CAD tool, it’s our digital workshop."  
@@ -337,7 +325,7 @@ All components were simulated, exported, and fabricated — **without a single d
 Show your appreciation and let the world know you’re backed by professional design tools.
 
 <div align="center">
-  <img src="images/rhino3d_badge.png" alt="Rhino 3D Sponsor Badge" width="200">
+  <img src="images/rhino3d.png" alt="Rhino 3D Sponsor Badge" width="200">
   <p><em>Place this badge on your project enclosures, documentation, or web dashboard</em></p>
 </div>
 
