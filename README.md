@@ -1,31 +1,30 @@
-# 📌 RGB LED Şerit Kontrol Sistemi - Ultimate Kılavuz
+# 📌 RGB LED Şerit Kontrol Sistemi - Projenize Özel Kılavuz
 
-## 🌟 Proje Hakkında Her Şey
-Bu doküman, ESP32 tabanlı akıllı LED kontrol sisteminin tüm detaylarını içermektedir. Sistem şunları yapabilir:
-- 🔌 2 kanallı PWM ile profesyonel LED kontrolü
-- 🕒 Zaman ve hava durumuna göre otomatik modlar
-- 📱 Hem fiziksel hem de web arayüzü ile kontrol
-- 🏠 Oda varlık algılama ile enerji tasarrufu
+## 🌟 Proje Hakkında
+Bu doküman, ESP32 tabanlı bir RGB LED kontrol sisteminin detaylarını içerir. Sistem şunları yapabilir:
+- 🔌 2 kanallı PWM ile kırmızı ve yeşil LED şerit kontrolü
+- 🕒 Türkiye/İstanbul saatine göre 19:00 sonrası otomatik röle kontrolü
+- 📱 Web arayüzü ve fiziksel butonlarla kontrol
+- 🏠 HC-SR04 ile varlık algılama ve enerji tasarrufu
+- 🌤️ Türkiye/Ankara hava durumuna göre LED dans modu
 
 ## 🛠️ Donanım Detayları
 
-### 🔧 Gerekli Bileşenler (Tam Liste)
-| Bileşen | Miktar | Notlar |
-|---------|--------|--------|
-| ESP32 DevKit v1 | 1 | Diğer versiyonlar da çalışır |
-| IRFZ44N MOSFET | 2 | LED şeritler için |
-| 5V Röle Modülü | 1 | Oda aydınlatması için |
-| HC-SR04 | 1 | Mesafe ölçümü |
-| 128x64 OLED | 1 | I2C arayüz |
-| 10K Potansiyometre | 2 | Analog kontrol |
-| Buton | 3 | Momentary tip |
-| 1N4007 Diyot | 2 | Gerilim koruma |
-| 10K Direnç | 5 | Pull-up/down için |
-| 100Ω Direnç | 2 | LED koruma |
-| Breadboard | 1 | Prototip için |
-| Jumper Kablolar | 20+ | Bağlantılar için |
+### 🔧 Gerekli Bileşenler
+| Bileşen            | Miktar | Notlar                     |
+|--------------------|--------|----------------------------|
+| ESP32 DevKit v1    | 1      | Diğer versiyonlar da olur  |
+| IRFZ44N MOSFET     | 2      | Kırmızı ve yeşil LED için  |
+| 5V Röle Modülü     | 1      | Oda ışığı kontrolü         |
+| HC-SR04            | 1      | Mesafe ölçümü              |
+| 128x64 OLED (I2C)  | 1      | GPIO6 SDA, GPIO7 SCL       |
+| 10K Potansiyometre | 2      | GPIO4 ve GPIO5             |
+| Buton              | 3      | GPIO8, GPIO9, GPIO10       |
+| 10K Direnç         | 5      | Pull-up için               |
+| Breadboard         | 1      | Prototip                   |
+| Jumper Kablolar    | 20+    | Bağlantılar için           |
 
-### 🎛️ Detaylı Pin Bağlantı Şeması
+### 🎛️ Pin Bağlantı Şeması
 ```mermaid
 graph TD;
     ESP32-->|GPIO4|POT1[Potansiyometre 1];
@@ -36,13 +35,13 @@ graph TD;
     ESP32-->|GPIO12|MOSFET1[IRFZ44N Kırmızı];
     ESP32-->|GPIO13|MOSFET2[IRFZ44N Yeşil];
     ESP32-->|GPIO21|RELAY1[Röle];
-    ESP32-->|GPIO7|OLED_SCL;
-    ESP32-->|GPIO6|OLED_SDA;
+    ESP32-->|GPIO7|OLED_SCL[OLED SCL];
+    ESP32-->|GPIO6|OLED_SDA[OLED SDA];
     ESP32-->|GPIO14|TRIG[HC-SR04 Trig];
     ESP32-->|GPIO15|ECHO[HC-SR04 Echo];
-    MOSFET1-->LED1[LED Şerit +];
-    MOSFET2-->LED2[LED Şerit +];
-    RELAY1-->LIGHT[Oda Lambası];
+    MOSFET1-->LED1[Kırmızı LED Şerit];
+    MOSFET2-->LED2[Yeşil LED Şerit];
+    RELAY1-->LIGHT[Oda Işığı];
 ```
 
 ### ⚡ Güç Yönetimi
@@ -56,27 +55,19 @@ pie
     "OLED Ekran" : 25
 ```
 
-## 💾 Yazılım Kurulumu - Adım Adım
+## 💾 Yazılım Kurulumu
 
-### 📥 Gerekli Kütüphaneler (Tam Liste)
+### 📥 Gerekli Kütüphaneler
 1. **Temel Kütüphaneler**:
    - `Adafruit_GFX` (v1.10.12)
    - `Adafruit_SSD1306` (v2.5.7)
    - `WiFi` (v2.0.0)
-   - `WebServer` (v2.0.0)
+   - `ESPAsyncWebServer` (v3.1.0)
 
-2. **Zaman Kütüphaneleri**:
+2. **Zaman ve Hava Durumu**:
    - `NTPClient` (v3.2.1)
-   - `TimeLib` (v1.6.1)
-
-3. **Hava Durumu**:
    - `ArduinoJson` (v6.19.4)
    - `HTTPClient` (v1.2)
-
-4. **Ek Kütüphaneler**:
-   - `EEPROM` (v2.0.0) - Ayarların saklanması için
-   - `ESP32PWM` (v1.0.0) - Gelişmiş PWM kontrolü
-
 ### ⚙️ Kod Yapısı (Detaylı)
 ```plaintext
 /project_root
@@ -266,7 +257,6 @@ graph TD;
 - **Katkı**:
   - Fork & Pull Request modeli
   - Kod stili: Google C++ Style Guide
-  - Testler: PlatformIO unit test
 
 ## 📞 İletişim ve Destek
 - **E-posta**: support@ledcontrolproject.com
