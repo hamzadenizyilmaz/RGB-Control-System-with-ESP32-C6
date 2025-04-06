@@ -68,9 +68,10 @@ pie
    - `NTPClient` (v3.2.1)
    - `ArduinoJson` (v6.19.4)
    - `HTTPClient` (v1.2)
+
 ### ⚙️ Kod Yapısı (Detaylı)
 ```plaintext
-/project_root
+/RGB-Control-System-with-ESP32-C6
 │── /data
 │   ├── config.json       # Sistem ayarları
 │   └── schedule.json     # Zamanlama ayarları
@@ -81,8 +82,7 @@ pie
 │── main.ino             # Ana program
 └── settings.h           # Tüm ayarlar
 ```
-
-### 🔄 Flashing İşlemi (Detaylı)
+### 🔄 Flashing İşlemi
 1. Arduino IDE'de:
    - Tools > Board > ESP32 Dev Module
    - Flash Mode: "QIO"
@@ -91,107 +91,62 @@ pie
 
 2. Özel ayarlar:
    ```cpp
-   #define SERIAL_DEBUG true  // Hata ayıklama için
    #define WIFI_SSID "YourSSID"
    #define WIFI_PASS "YourPassword"
    #define OWM_API_KEY "YourAPIKey"
    ```
 
-## 🎛️ Sistem Özellikleri - Ultimate Detaylar
+## 🎛️ Sistem Özellikleri
 
 ### 💡 LED Kontrol Sistemi
 - **PWM Özellikleri**:
   - 8-bit çözünürlük (0-255)
-  - 1KHz PWM frekansı
-  - Soft-start özelliği (ani açılmayı önler)
-
-- **Renk Modları**:
-  ```cpp
-  enum ColorModes {
-    SOLID,          // Sabit renk
-    FADE,           // Yavaş geçiş
-    STROBE,         // Stroboskopik
-    WEATHER_SYNC,   // Hava durumu senkronizasyonu
-    MUSIC_MODE      // Ses duyarlı (gelecek sürüm)
-  };
-  ```
+  - 5kHz PWM frekansı
+- **Kontrol**:
+  - POT1 ile kırmızı LED ayarı
+  - POT2 ile yeşil LED ayarı
 
 ### ⏱️ Zamanlayıcı Sistemi
-```mermaid
-gantt
-    title Günlük Zamanlama
-    dateFormat  HH:mm
-    section Aydınlatma
-    Otomatik Mod : 19:00, 07:00
-    section LED
-    Gündüz Modu : 08:00, 18:00
-    Akşam Modu : 18:00, 22:00
-    Gece Modu : 22:00, 08:00
-```
+- Türkiye/İstanbul saat dilimi (GMT+3)
+- Röle, 19:00 sonrası HC-SR04 verisine göre açılır/kapanır:
+  - Kişi odada: Açık
+  - Kişi çıkarsa: Kapalı
 
 ### 🌤️ Hava Durumu Entegrasyonu
-- OpenWeatherMap API kullanır
-- Ankara için özel sorgu:
+- Ankara hava durumu (OpenWeatherMap API):
   ```http
   GET https://api.openweathermap.org/data/2.5/weather?q=Ankara,TR&appid=YOUR_API_KEY&units=metric&lang=tr
   ```
-- Yanıt örneği:
-  ```json
-  {
-    "weather":[{
-      "id":800,
-      "main":"Clear",
-      "description":"açık",
-      "icon":"01d"
-    }],
-    "main":{
-      "temp":22.5,
-      "humidity":40
-    }
-  }
-  ```
+- BTN3 ile dans modu: Hava durumuna göre LED'ler senkronize hareket eder.
 
-## 🖥️ Kullanıcı Arayüzü - Ultimate Kılavuz
+## 🖥️ Kullanıcı Arayüzü
 
 ### 📺 OLED Menü Yapısı
 ```mermaid
 graph TD;
-    A[Ana Menü] --> B[LED Kontrol];
-    A --> C[Röle Ayarları];
-    A --> D[Sistem Ayarları];
-    B --> B1[Renk Seçimi];
-    B --> B2[Parlaklık];
-    B --> B3[Animasyon Modu];
-    C --> C1[Zamanlama];
-    C --> C2[Manuel Kontrol];
-    D --> D1[WiFi Ayarları];
-    D --> D2[Zaman Ayarı];
-    D --> D3[Fabrika Ayarları];
+    A[Ana Menü] --> B[LED Değerleri];
+    A --> C[Röle Durumu];
+    A --> D[MOSFET Durumu];
+    B --> B1[Kırmızı: 0-255];
+    B --> B2[Yeşil: 0-255];
+    C --> C1[Aç/Kapa];
+    D --> D1[PWM Ayarı];
+    D --> D2[Aç/Kapa];
 ```
 
-### 🕹️ Buton Kontrolleri (Detaylı)
-| Buton | Tek Tık | Çift Tık | Uzun Basış |
-|-------|---------|----------|------------|
-| BTN1  | Menüde aşağı | Röle kontrolü | Sistem kapanış |
-| BTN2  | Menüde yukarı | PWM ayarları | WiFi ayarları |
-| BTN3  | Seçim onayı | Animasyon modu | Yeniden başlat |
+### 🕹️ Buton Kontrolleri
+| Buton | Tek Tık         | Çift Tık            | Kullanım                  |
+|-------|-----------------|---------------------|---------------------------|
+| BTN1  | Menüde aşağı    | Röle durumu         | POT1 ile değer değişimi   |
+| BTN2  | Menüde yukarı   | MOSFET durumu       | POT1 ile değer değişimi   |
+| BTN3  | Seçim onayı     | Dans modu           | Aç/Kapa işlemleri         |
 
-### 🌐 Web Arayüzü Özellikleri
+### 🌐 Web Arayüzü
 - **Endpointler**:
   ```
-  /api/v1/
-  ├── /led          # LED kontrol
-  ├── /relay        # Röle kontrol
-  ├── /sensor      # HC-SR04 verisi
-  └── /system      # Sistem bilgisi
-  ```
-
-- **Örnek Kullanım**:
-  ```bash
-  # LED kontrolü
-  curl -X POST http://192.168.1.100/api/v1/led \
-    -H "Content-Type: application/json" \
-    -d '{"red":255, "green":120, "blue":0, "mode":"fade"}'
+  /           # Ana sayfa
+  /relay/on   # Röle aç
+  /relay/off  # Röle kapat
   ```
 
 ## 🔧 Sorun Giderme - Ultimate Rehber
@@ -241,22 +196,8 @@ graph TD;
 | 0x60  | LED Ayarları | 16 byte |
 | 0x70  | Zamanlama | 32 byte |
 
-### 🔄 OTA Güncelleme
-1. `ArduinoOTA` kütüphanesini ekleyin
-2. Ayarlar:
-   ```cpp
-   ArduinoOTA
-     .onStart([]() {
-       Serial.println("OTA Start");
-     })
-     .setPassword("ota123");
-   ```
-
-## 📜 Lisans ve Katkı
-- **Lisans**: GNU GPLv3
-- **Katkı**:
-  - Fork & Pull Request modeli
-  - Kod stili: Google C++ Style Guide
+## 📜 Lisans
+- **Lisans**: CERN-OHL-S-2.0
 
 ## 📞 İletişim ve Destek
 - **E-posta**: support@ledcontrolproject.com
@@ -266,4 +207,4 @@ graph TD;
 ---
 
 Bu doküman projenin tüm detaylarını kapsamaktadır. Güncellemeler için proje GitHub sayfasını takip edin:  
-🔗 [GitHub Repository](https://github.com/yourusername/led-control-system)
+🔗 [GitHub Repository]([https://github.com/yourusername/led-control-system](https://github.com/hamzadenizyilmaz/RGB-Control-System-with-ESP32-C6))
