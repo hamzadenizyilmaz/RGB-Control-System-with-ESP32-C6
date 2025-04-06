@@ -339,9 +339,8 @@ Show your appreciation and let the world know you’re backed by professional de
 ---
 
 ### 🔍 Explore Further
-- [x] **[Plugin Marketplace](https://www.food4rhino.com/)**  
-- [x] **[Community Forum](https://discourse.mcneel.com/)**  
-- [x] **[Learning Portal](https://www.rhino3d.com/learn/)**
+- [x] **[Plugin Marketplace](https://www.rhino3dprinter.com/)**  
+- [x] **[Community Forum](https://www.rhino3dprinter.com/)**  
 
 ---
 
