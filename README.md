@@ -229,19 +229,9 @@ As the backbone of our hardware supply chain, Elecrow delivered:
 - [ ] **ASK10** → 10 free consulting minutes
 ```
 
-### 📈 By the Numbers
-```mermaid
-pie
-    title Elecrow's 2023 Global Impact
-    "PCBs Manufactured" : 850000
-    "Happy Makers" : 120000
-    "Countries Served" : 102
-    "Components in Stock" : 10500
-```
-
 ### 🏆 Testimonial
 > "When our MOSFETs failed during testing, Elecrow's team **personally hand-selected** replacement units and expedited shipping. This level of care makes them the **unsung hero of hardware startups**."  
-> **— [Your Name]**, Project Lead
+> **— RGB-Control-System-with-ESP32-C6**, Project Lead
 
 <div align="center">
   <h3>Connect With Elecrow</h3>
@@ -250,7 +240,7 @@ pie
     <a href="mailto:support@elecrow.com">✉️ Support</a> | 
     <a href="https://linkedin.com/company/elecrow" target="_blank">💼 LinkedIn</a>
   </p>
-  <img src="images/elecrow_team.jpg" alt="Elecrow Team" width="500" style="border-radius: 15px; margin-top: 20px;">
+  <img src="images/elecrow.png" alt="Elecrow Team" width="500" style="border-radius: 15px; margin-top: 20px;">
   <p><em>Elecrow's engineering team reviewing our project requirements</em></p>
 </div>
 
