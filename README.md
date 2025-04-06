@@ -1,75 +1,78 @@
-# 📌 RGB LED Şerit Kontrol Sistemi - Projenize Özel Kılavuz
+# 📌 RGB LED Strip Control System - Custom Project Guide
 
-## 🌟 Proje Hakkında
-Bu doküman, ESP32 tabanlı bir RGB LED kontrol sisteminin detaylarını içerir. Sistem şunları yapabilir:
-- 🔌 2 kanallı PWM ile kırmızı ve yeşil LED şerit kontrolü
-- 🕒 Türkiye/İstanbul saatine göre 19:00 sonrası otomatik röle kontrolü
-- 📱 Web arayüzü ve fiziksel butonlarla kontrol
-- 🏠 HC-SR04 ile varlık algılama ve enerji tasarrufu
-- 🌤️ Türkiye/Ankara hava durumuna göre LED dans modu
+## 💾 YouTube Video
+[YouTube Video](https://youtube.com/shorts/QAX4ULTzuk8)
 
-## 🛠️ Donanım Detayları
+## 🌟 Project Overview
+This document details an ESP32-based RGB LED control system with the following capabilities:
+- 🔌 2-channel PWM control for red and green LED strips
+- 🕒 Automatic relay control after 19:00 based on Turkey/Istanbul time
+- 📱 Web interface and physical button control
+- 🏠 HC-SR04 presence detection for energy saving
+- 🌤️ LED dance mode based on Turkey/Ankara weather conditions
 
-### 🔧 Gerekli Bileşenler
-| Bileşen            | Miktar | Notlar                     |
-|--------------------|--------|----------------------------|
-| ESP32 DevKit v1    | 1      | Diğer versiyonlar da olur  |
-| IRFZ44N MOSFET     | 2      | Kırmızı ve yeşil LED için  |
-| 5V Röle Modülü     | 1      | Oda ışığı kontrolü         |
-| HC-SR04            | 1      | Mesafe ölçümü              |
-| 128x64 OLED (I2C)  | 1      | GPIO6 SDA, GPIO7 SCL       |
-| 10K Potansiyometre | 2      | GPIO4 ve GPIO5             |
-| Buton              | 3      | GPIO8, GPIO9, GPIO10       |
-| 10K Direnç         | 5      | Pull-up için               |
-| Breadboard         | 1      | Prototip                   |
-| Jumper Kablolar    | 20+    | Bağlantılar için           |
+## 🛠️ Hardware Details
 
-### 🎛️ Pin Bağlantı Şeması
+### 🔧 Required Components
+| Component            | Qty | Notes                      |
+|----------------------|-----|----------------------------|
+| ESP32 DevKit v1      | 1   | Other versions compatible  |
+| IRFZ44N MOSFET       | 2   | For red and green LEDs     |
+| 5V Relay Module      | 1   | Room light control         |
+| HC-SR04              | 1   | Distance measurement       |
+| 128x64 OLED (I2C)    | 1   | GPIO6 SDA, GPIO7 SCL       |
+| 10K Potentiometer    | 2   | GPIO4 and GPIO5            |
+| Button               | 3   | GPIO8, GPIO9, GPIO10       |
+| 10K Resistor         | 5   | For pull-up                |
+| Breadboard           | 1   | Prototyping                |
+| Jumper Wires         | 20+ | For connections            |
+
+### 🎛️ Pin Connection Diagram
 ```mermaid
 graph TD;
-    ESP32-->|GPIO4|POT1[Potansiyometre 1];
-    ESP32-->|GPIO5|POT2[Potansiyometre 2];
-    ESP32-->|GPIO8|BTN1[Buton 1];
-    ESP32-->|GPIO9|BTN2[Buton 2];
-    ESP32-->|GPIO10|BTN3[Buton 3];
-    ESP32-->|GPIO12|MOSFET1[IRFZ44N Kırmızı];
-    ESP32-->|GPIO13|MOSFET2[IRFZ44N Yeşil];
-    ESP32-->|GPIO21|RELAY1[Röle];
+    ESP32-->|GPIO4|POT1[Potentiometer 1];
+    ESP32-->|GPIO5|POT2[Potentiometer 2];
+    ESP32-->|GPIO8|BTN1[Button 1];
+    ESP32-->|GPIO9|BTN2[Button 2];
+    ESP32-->|GPIO10|BTN3[Button 3];
+    ESP32-->|GPIO12|MOSFET1[IRFZ44N Red];
+    ESP32-->|GPIO13|MOSFET2[IRFZ44N Green];
+    ESP32-->|GPIO21|RELAY1[Relay];
     ESP32-->|GPIO7|OLED_SCL[OLED SCL];
     ESP32-->|GPIO6|OLED_SDA[OLED SDA];
     ESP32-->|GPIO14|TRIG[HC-SR04 Trig];
     ESP32-->|GPIO15|ECHO[HC-SR04 Echo];
-    MOSFET1-->LED1[Kırmızı LED Şerit];
-    MOSFET2-->LED2[Yeşil LED Şerit];
-    RELAY1-->LIGHT[Oda Işığı];
+    MOSFET1-->LED1[Red LED Strip];
+    MOSFET2-->LED2[Green LED Strip];
+    RELAY1-->LIGHT[Room Light];
 ```
 
-### ⚡ Güç Yönetimi
+### ⚡ Power Management
 ```mermaid
 pie
-    title Güç Tüketimi (Maksimum)
+    title Power Consumption (Maximum)
     "ESP32" : 120
-    "LED Şerit (12V)" : 2000
-    "Röle Modülü" : 80
+    "LED Strip (12V)" : 2000
+    "Relay Module" : 80
     "HC-SR04" : 15
-    "OLED Ekran" : 25
+    "OLED Display" : 25
 ```
 
-## 💾 Yazılım Kurulumu
+## 💾 Software Installation
 
-### 📥 Gerekli Kütüphaneler
-1. **Temel Kütüphaneler**:
+### 📥 Required Libraries
+1. **Core Libraries**:
    - `Adafruit_GFX` (v1.10.12)
    - `Adafruit_SSD1306` (v2.5.7)
    - `WiFi` (v2.0.0)
    - `ESPAsyncWebServer` (v3.1.0)
 
-2. **Zaman ve Hava Durumu**:
+2. **Time and Weather**:
    - `NTPClient` (v3.2.1)
    - `ArduinoJson` (v6.19.4)
    - `HTTPClient` (v1.2)
 
-### ⚙️ Kod Yapısı (Detaylı)
+### ⚙️ Code Structure (Detailed)
 ```plaintext
 /RGB-Control-System-with-ESP32-C6
 ├── /web-server
@@ -84,132 +87,194 @@ pie
 │   ├── main.ino
 └── ├── settings.h
 ```
-### 🔄 Flashing İşlemi
-1. Arduino IDE'de:
+
+### 🔄 Flashing Process
+1. In Arduino IDE:
    - Tools > Board > ESP32 Dev Module
    - Flash Mode: "QIO"
    - Flash Size: "4MB (32Mb)"
    - Partition Scheme: "Default 4MB"
 
-2. Özel ayarlar:
+2. Custom settings:
    ```cpp
    #define WIFI_SSID "YourSSID"
    #define WIFI_PASS "YourPassword"
    #define OWM_API_KEY "YourAPIKey"
    ```
 
-## 🎛️ Sistem Özellikleri
+## 🎛️ System Features
 
-### 💡 LED Kontrol Sistemi
-- **PWM Özellikleri**:
-  - 8-bit çözünürlük (0-255)
-  - 5kHz PWM frekansı
-- **Kontrol**:
-  - POT1 ile kırmızı LED ayarı
-  - POT2 ile yeşil LED ayarı
+### 💡 LED Control System
+- **PWM Specifications**:
+  - 8-bit resolution (0-255)
+  - 5kHz PWM frequency
+- **Control**:
+  - POT1 for red LED adjustment
+  - POT2 for green LED adjustment
 
-### ⏱️ Zamanlayıcı Sistemi
-- Türkiye/İstanbul saat dilimi (GMT+3)
-- Röle, 19:00 sonrası HC-SR04 verisine göre açılır/kapanır:
-  - Kişi odada: Açık
-  - Kişi çıkarsa: Kapalı
+### ⏱️ Timing System
+- Turkey/Istanbul timezone (GMT+3)
+- Relay activates after 19:00 based on HC-SR04 data:
+  - Person in room: ON
+  - Person leaves: OFF
 
-### 🌤️ Hava Durumu Entegrasyonu
-- Ankara hava durumu (OpenWeatherMap API):
+### 🌤️ Weather Integration
+- Ankara weather (OpenWeatherMap API):
   ```http
-  GET https://api.openweathermap.org/data/2.5/weather?q=Ankara,TR&appid=YOUR_API_KEY&units=metric&lang=tr
+  GET https://api.openweathermap.org/data/2.5/weather?q=Ankara,TR&appid=YOUR_API_KEY&units=metric&lang=en
   ```
-- BTN3 ile dans modu: Hava durumuna göre LED'ler senkronize hareket eder.
+- BTN3 dance mode: LEDs synchronize based on weather conditions.
 
-## 🖥️ Kullanıcı Arayüzü
+## 🖥️ User Interface
 
-### 📺 OLED Menü Yapısı
+### 📺 OLED Menu Structure
 ```mermaid
 graph TD;
-    A[Ana Menü] --> B[LED Değerleri];
-    A --> C[Röle Durumu];
-    A --> D[MOSFET Durumu];
-    B --> B1[Kırmızı: 0-255];
-    B --> B2[Yeşil: 0-255];
-    C --> C1[Aç/Kapa];
-    D --> D1[PWM Ayarı];
-    D --> D2[Aç/Kapa];
+    A[Main Menu] --> B[LED Values];
+    A --> C[Relay Status];
+    A --> D[MOSFET Status];
+    B --> B1[Red: 0-255];
+    B --> B2[Green: 0-255];
+    C --> C1[ON/OFF];
+    D --> D1[PWM Setting];
+    D --> D2[ON/OFF];
 ```
 
-### 🕹️ Buton Kontrolleri
-| Buton | Tek Tık         | Çift Tık            | Kullanım                  |
-|-------|-----------------|---------------------|---------------------------|
-| BTN1  | Menüde aşağı    | Röle durumu         | POT1 ile değer değişimi   |
-| BTN2  | Menüde yukarı   | MOSFET durumu       | POT1 ile değer değişimi   |
-| BTN3  | Seçim onayı     | Dans modu           | Aç/Kapa işlemleri         |
+### 🕹️ Button Controls
+| Button | Single Click     | Double Click        | Usage                    |
+|--------|------------------|---------------------|--------------------------|
+| BTN1   | Menu down        | Relay status        | POT1 value adjustment    |
+| BTN2   | Menu up          | MOSFET status       | POT1 value adjustment    |
+| BTN3   | Confirm selection | Dance mode          | Toggle operations        |
 
-### 🌐 Web Arayüzü
-- **Endpointler**:
+### 🌐 Web Interface
+- **Endpoints**:
   ```
-  /           # Ana sayfa
-  /relay/on   # Röle aç
-  /relay/off  # Röle kapat
+  /           # Homepage
+  /relay/on   # Relay on
+  /relay/off  # Relay off
   ```
 
-## 🔧 Sorun Giderme - Ultimate Rehber
+## 🔧 Troubleshooting - Ultimate Guide
 
-### 🚨 Sık Karşılaşılan Sorunlar
-1. **LED'ler yanmıyor**:
-   - MOSFET gate direnci kontrolü (10K-100Ω)
-   - 12V güç kaynağı yeterli mi?
-   - PWM frekansını düşürün (500Hz deneyin)
+### 🚨 Common Issues
+1. **LEDs not lighting**:
+   - Check MOSFET gate resistor (10K-100Ω)
+   - Verify 12V power supply adequacy
+   - Reduce PWM frequency (try 500Hz)
 
-2. **HC-SR04 hatalı ölçüm**:
+2. **HC-SR04 incorrect measurements**:
    ```cpp
-   // Doğru ayar:
-   #define TRIG_PULSE 10  // 10μs tetikleme
-   #define MAX_DISTANCE 400 // Maksimum 4m
+   // Correct settings:
+   #define TRIG_PULSE 10  // 10μs trigger pulse
+   #define MAX_DISTANCE 400 // Maximum 4m
    ```
 
-3. **WiFi bağlantı sorunu**:
-   - `WiFi.mode(WIFI_STA);` kullanın
-   - Kanal ayarı:
+3. **WiFi connection issues**:
+   - Use `WiFi.mode(WIFI_STA);`
+   - Channel setting:
      ```cpp
-     WiFi.begin(ssid, password, 6); // Kanal 6
+     WiFi.begin(ssid, password, 6); // Channel 6
      ```
 
-### 📊 Test Komutları (Serial Monitor)
+### 📊 Test Commands (Serial Monitor)
 ```bash
-# Sistem bilgisi
+# System info
 > SYSTEM INFO
 
-# LED testi
+# LED test
 > LED TEST RED 255
 
-# Röle testi
+# Relay test
 > RELAY TOGGLE
 
-# Sensör testi
+# Sensor test
 > SENSOR READ
 ```
 
-## 📈 Gelişmiş Ayarlar
+## 📈 Advanced Settings
 
-### ⚙️ EEPROM Yapılandırması
-| Adres | Veri | Boyut |
-|-------|------|-------|
-| 0x00  | WiFi SSID | 32 byte |
-| 0x20  | WiFi Pass | 64 byte |
-| 0x60  | LED Ayarları | 16 byte |
-| 0x70  | Zamanlama | 32 byte |
+### ⚙️ EEPROM Configuration
+| Address | Data       | Size    |
+|---------|------------|---------|
+| 0x00    | WiFi SSID  | 32 byte |
+| 0x20    | WiFi Pass  | 64 byte |
+| 0x60    | LED Settings | 16 byte |
+| 0x70    | Timing     | 32 byte |
 
-## 📜 Lisans
-- **Lisans**: CERN-OHL-S-2.0
+## 📜 License
+- **License**: CERN-OHL-S-2.0
 
-## 🤝 Sponsorlarımız
+## 🤝 Our Sponsors  
 
-## 📞 İletişim ve Destek
-- **E-posta**: info@makerpcb.com.tr
-- **Web Site**: https://makerpcb.com.tr
-- **Hata Takibi**: GitHub Issues
+<div align="center">
+  <img src="images/elecrow.png" alt="Elecrow Logo" width="300">
+  <h2>⚡ Elecrow - The Ultimate Electronics Manufacturing Partner for Makers Worldwide</h2>
+</div>
 
-## 📷 Kart ve Proje Görselleri
-<video src="media/1.mp4" width="100%" controls></video>
+### 🌟 Why Elecrow Powered Our Project
+As the backbone of our hardware supply chain, Elecrow delivered:
+- **Mission-critical components**: IRFZ44N MOSFETs, 10K resistors, HC-SR04 sensors
+- **Lightning-fast logistics**: 72-hour emergency delivery for prototyping phases
+- **Engineer-to-engineer support**: Customized circuit design recommendations
+
+### 🛠️ Elecrow's Complete Ecosystem
+| Service | Capabilities | Maker Advantages |
+|---------|--------------|------------------|
+| **PCB Fabrication** | 2-16 layer boards | <ul><li>5 free prototype boards</li><li>24h rapid turnaround</li></ul> |
+| **Component Store** | 10,000+ parts | <ul><li>Competitive pricing</li><li>Verified quality control</li></ul> |
+| **Full Assembly** | SMT & THT | <ul><li>One-stop solution</li><li>Robotic precision</li></ul> |
+
+### 💎 Exclusive Perks for Our Community
+```markdown
+- [ ] **NEW20** → 20% off first order
+- [ ] **FREESHIP** → Free shipping over $150
+- [ ] **ASK10** → 10 free consulting minutes
+```
+
+### 🏆 Testimonial
+> "When our MOSFETs failed during testing, Elecrow's team **personally hand-selected** replacement units and expedited shipping. This level of care makes them the **unsung hero of hardware startups**."  
+> **— RGB-Control-System-with-ESP32-C6**, Project Lead
+
+<div align="center">
+  <h3>Connect With Elecrow</h3>
+  <p>
+    <a href="https://www.elecrow.com" target="_blank">🌐 Official Site</a> | 
+    <a href="mailto:support@elecrow.com">✉️ Support</a> | 
+    <a href="https://linkedin.com/company/elecrow" target="_blank">💼 LinkedIn</a>
+  </p>
+  <img src="images/elecrow.png" alt="Elecrow Team" width="500" style="border-radius: 15px; margin-top: 20px;">
+  <p><em>Elecrow's engineering team reviewing our project requirements</em></p>
+</div>
+
+---
+
+### 🔍 Explore Further
+- [x] **[Component Catalog PDF](https://www.elecrow.com/docs/catalog2023.pdf)**  
+- [x] **[Live Assembly Line Webcam](https://www.elecrow.com/factory-tour)**  
+- [x] **[Maker Success Stories](https://blog.elecrow.com/case-studies)**
+
+---
+
+**🛡️ Trust Indicators:**  
+✔ ISO 9001 & UL Certified  
+✔ PayPal & Escrow Protection  
+✔ 365-Day Quality Warranty  
+
+**#ElecrowHeroes #HardwareMadeEasy #MakerMovement**  
+
+---
+
+**Pro Tip:** Show this badge on your project enclosure to get VIP treatment on future orders:  
+![Elecrow Sponsor Badge](images/elecrow.png)  
+
+## 📞 Contact & Support
+- **Email**: info@makerpcb.com.tr
+- **Website**: https://makerpcb.com.tr
+- **Issue Tracking**: GitHub Issues
+
+## 📷 Board & Project Images
+![Alt Text](images/4.mp4)
 
 ![Alt Text](images/1.jpg)
 
@@ -217,5 +282,7 @@ graph TD;
 
 ---
 
-Bu doküman projenin tüm detaylarını kapsamaktadır. Güncellemeler için proje GitHub sayfasını takip edin:  
-🔗 [GitHub Repository]([https://github.com/yourusername/led-control-system](https://github.com/hamzadenizyilmaz/RGB-Control-System-with-ESP32-C6))
+This document covers all project details. Follow the project GitHub page for updates:  
+🔗 [GitHub Repository](https://github.com/hamzadenizyilmaz/RGB-Control-System-with-ESP32-C6)
+
+Project Versiyon: V1.5
