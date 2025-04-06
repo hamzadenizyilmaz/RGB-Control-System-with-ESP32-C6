@@ -8,15 +8,6 @@ Bu doküman, ESP32 tabanlı bir RGB LED kontrol sisteminin detaylarını içerir
 - 🏠 HC-SR04 ile varlık algılama ve enerji tasarrufu
 - 🌤️ Türkiye/Ankara hava durumuna göre LED dans modu
 
-## 📷 Kart ve Proje Görselleri
-![Alt Text](images/4.mp4)
-
-![Alt Text](images/1.jpg)
-
-![Alt Text](images/2.jpg)
-
-![Alt Text](images/3.jpg)
-
 ## 🛠️ Donanım Detayları
 
 ### 🔧 Gerekli Bileşenler
@@ -216,6 +207,13 @@ graph TD;
 - **E-posta**: info@makerpcb.com.tr
 - **Web Site**: https://makerpcb.com.tr
 - **Hata Takibi**: GitHub Issues
+
+## 📷 Kart ve Proje Görselleri
+<video src="media/1.mp4" width="100%" controls></video>
+
+![Alt Text](images/1.jpg)
+
+![Alt Text](images/2.jpg)
 
 ---
 
