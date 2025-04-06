@@ -1,7 +1,7 @@
 # 📌 RGB LED Strip Control System - Custom Project Guide
 
 ## 💾 YouTube Video
-[!YouTube Video](https://youtube.com/shorts/QAX4ULTzuk8)
+[YouTube Video](https://youtube.com/shorts/QAX4ULTzuk8)
 
 ## 🌟 Project Overview
 This document details an ESP32-based RGB LED control system with the following capabilities:
