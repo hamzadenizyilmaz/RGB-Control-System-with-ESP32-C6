@@ -1,5 +1,8 @@
 # 📌 RGB LED Strip Control System - Custom Project Guide
 
+## 💾 YouTube Video
+[![YouTube Video](images/1.jpg)](https://youtube.com/shorts/5NHtIOZ7Uj4)
+
 ## 🌟 Project Overview
 This document details an ESP32-based RGB LED control system with the following capabilities:
 - 🔌 2-channel PWM control for red and green LED strips
