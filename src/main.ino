@@ -7,35 +7,29 @@
 #include <NTPClient.h>
 #include <WiFiUdp.h>
 
-// Pin Tanımlamaları (ESP32-C6 için)
-#define LED_PIN 8          // GPIO8 - NeoPixel data pin
-#define BUTTON1_PIN 9      // GPIO9
-#define BUTTON2_PIN 10     // GPIO10
-#define BUTTON3_PIN 11     // GPIO11
-#define RELAY_PIN 12       // GPIO12 - Röle kontrol
-#define TRIG_PIN 13        // GPIO13 - HC-SR04 Trig
-#define ECHO_PIN 14        // GPIO14 - HC-SR04 Echo
+#define LED_PIN 8
+#define BUTTON1_PIN 9
+#define BUTTON2_PIN 10
+#define BUTTON3_PIN 11
+#define RELAY_PIN 12
+#define TRIG_PIN 13
+#define ECHO_PIN 14
 
-// NeoPixel ayarları
-#define LED_COUNT 60       // LED sayısı
+#define LED_COUNT 60
 Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 
-// WiFi ayarları
 const char* ssid = "WIFI_SSID";
 const char* password = "WIFI_PASS";
 WebServer server(80);
 
-// Zaman ayarları
 WiFiUDP ntpUDP;
-NTPClient timeClient(ntpUDP, "pool.ntp.org", 10800); // GMT+3 (Türkiye)
+NTPClient timeClient(ntpUDP, "pool.ntp.org", 10800);
 
-// Hava durumu API
 const String weatherAPIKey = "API_KEY";
 const String city = "Ankara,TR";
 
-// Sistem durumu
 struct SystemState {
-  uint32_t color = 0xFF0000; // Varsayılan kırmızı
+  uint32_t color = 0xFF0000;
   uint8_t brightness = 100;
   bool relayState = false;
   bool weatherMode = false;
@@ -43,13 +37,11 @@ struct SystemState {
   float temperature = 20.0;
 } state;
 
-// Buton yönetimi
 unsigned long lastButtonPress[3] = {0, 0, 0};
 
 void setup() {
   Serial.begin(115200);
   
-  // Pin ayarları
   pinMode(BUTTON1_PIN, INPUT_PULLUP);
   pinMode(BUTTON2_PIN, INPUT_PULLUP);
   pinMode(BUTTON3_PIN, INPUT_PULLUP);
@@ -57,12 +49,10 @@ void setup() {
   pinMode(TRIG_PIN, OUTPUT);
   pinMode(ECHO_PIN, INPUT);
   
-  // LED şerit başlatma
   strip.begin();
   strip.show();
   strip.setBrightness(state.brightness);
   
-  // WiFi bağlantısı
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
@@ -72,39 +62,27 @@ void setup() {
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
   
-  // Zaman istemcisi
   timeClient.begin();
   timeClient.update();
   
-  // Web sunucusu
   setupWebServer();
   
-  // EEPROM
   EEPROM.begin(512);
   loadSettings();
 }
 
 void loop() {
-  // Buton kontrolü
   handleButtons();
-  
-  // Oda varlık kontrolü
   checkRoomPresence();
-  
-  // LED güncelleme
   updateLEDs();
-  
-  // Web sunucusu
   server.handleClient();
   
-  // Zaman güncelleme (her dakika)
   static unsigned long lastTimeUpdate = 0;
   if (millis() - lastTimeUpdate > 60000) {
     timeClient.update();
     lastTimeUpdate = millis();
   }
   
-  // Hava durumu güncelleme (her 10 dakika)
   static unsigned long lastWeatherUpdate = 0;
   if (millis() - lastWeatherUpdate > 600000 && WiFi.status() == WL_CONNECTED) {
     updateWeather();
@@ -114,7 +92,6 @@ void loop() {
   delay(10);
 }
 
-// Web sunucusu ayarları
 void setupWebServer() {
   server.on("/", HTTP_GET, []() {
     String html = "<!DOCTYPE html><html><head><title>RGB LED Control</title>";
@@ -176,37 +153,29 @@ void setupWebServer() {
   server.begin();
 }
 
-// Buton kontrol fonksiyonları
 void handleButtons() {
-  // Buton 1 - Renk değiştirme
   if (digitalRead(BUTTON1_PIN) == LOW) {
-    if (millis() - lastButtonPress[0] < 300) { // Çift tık
-      // Röle durumunu göster
+    if (millis() - lastButtonPress[0] < 300) {
       Serial.println("Röle durumu: " + String(state.relayState ? "AÇIK" : "KAPALI"));
-    } else { // Tek tık
-      // Renk değiştirme
+    } else {
       state.color = wheel(random(255));
       state.weatherMode = false;
     }
     lastButtonPress[0] = millis();
-    delay(200); // Debounce
+    delay(200);
   }
 
-  // Buton 2 - Parlaklık ayarı
   if (digitalRead(BUTTON2_PIN) == LOW) {
-    if (millis() - lastButtonPress[1] < 300) { // Çift tık
-      // PWM durumunu göster
+    if (millis() - lastButtonPress[1] < 300) {
       Serial.println("PWM Değeri: " + String(state.brightness));
-    } else { // Tek tık
-      // Parlaklık ayarı
+    } else {
       state.brightness = (state.brightness + 25) % 125;
       strip.setBrightness(state.brightness);
     }
     lastButtonPress[1] = millis();
-    delay(200); // Debounce
+    delay(200);
   }
 
-  // Buton 3 - Hava durumu modu
   if (digitalRead(BUTTON3_PIN) == LOW) {
     state.weatherMode = !state.weatherMode;
     if (state.weatherMode) {
@@ -216,13 +185,11 @@ void handleButtons() {
       Serial.println("Hava durumu modu pasif");
     }
     lastButtonPress[2] = millis();
-    delay(200); // Debounce
+    delay(200);
   }
 }
 
-// Oda varlık kontrolü
 void checkRoomPresence() {
-  // HC-SR04 ile mesafe ölçümü
   digitalWrite(TRIG_PIN, LOW);
   delayMicroseconds(2);
   digitalWrite(TRIG_PIN, HIGH);
@@ -232,7 +199,6 @@ void checkRoomPresence() {
   long duration = pulseIn(ECHO_PIN, HIGH);
   int distance = duration * 0.034 / 2;
   
-  // Hareket algılama (1m içinde)
   if (distance > 0 && distance < 100) {
     if (!state.relayState && shouldLightBeOn()) {
       digitalWrite(RELAY_PIN, HIGH);
@@ -246,10 +212,9 @@ void checkRoomPresence() {
 
 bool shouldLightBeOn() {
   int currentHour = timeClient.getHours();
-  return (currentHour >= 19 || currentHour < 7); // 19:00-07:00 arası
+  return (currentHour >= 19 || currentHour < 7);
 }
 
-// LED güncelleme
 void updateLEDs() {
   if (state.weatherMode) {
     weatherAnimation();
@@ -261,21 +226,18 @@ void updateLEDs() {
   strip.show();
 }
 
-// Hava durumu animasyonu
 void weatherAnimation() {
   static unsigned long lastUpdate = 0;
   if (millis() - lastUpdate > 100) {
     if (state.weatherStatus == "Rain") {
-      // Yağmur efekti
       for (int i = 0; i < strip.numPixels(); i++) {
         if (random(10) < 3) {
-          strip.setPixelColor(i, strip.Color(0, 0, 255)); // Mavi
+          strip.setPixelColor(i, strip.Color(0, 0, 255));
         } else {
-          strip.setPixelColor(i, strip.Color(0, 0, 0)); // Kapalı
+          strip.setPixelColor(i, strip.Color(0, 0, 0));
         }
       }
     } else if (state.weatherStatus == "Clear") {
-      // Açık hava efekti
       static int pos = 0;
       for (int i = 0; i < strip.numPixels(); i++) {
         strip.setPixelColor(i, wheel((i + pos) % 255));
@@ -287,7 +249,6 @@ void weatherAnimation() {
   }
 }
 
-// Hava durumu güncelleme
 void updateWeather() {
   HTTPClient http;
   String url = "http://api.openweathermap.org/data/2.5/weather?q=" + city + 
@@ -306,7 +267,6 @@ void updateWeather() {
   http.end();
 }
 
-// Yardımcı fonksiyonlar
 uint32_t wheel(byte WheelPos) {
   WheelPos = 255 - WheelPos;
   if (WheelPos < 85) {
@@ -321,12 +281,10 @@ uint32_t wheel(byte WheelPos) {
 }
 
 void loadSettings() {
-  // EEPROM'dan ayarları yükle
   EEPROM.get(0, state);
 }
 
 void saveSettings() {
-  // EEPROM'a ayarları kaydet
   EEPROM.put(0, state);
   EEPROM.commit();
 }
